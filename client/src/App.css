@@ -1,0 +1,2726 @@
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #f7ead5, #e8c99c);
+  color: #49301d;
+}
+
+button {
+  font-family: inherit;
+}
+
+.game {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 8%;
+  background: #603d25;
+  color: white;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.level {
+  background: #e7b45b;
+  color: #3d2818;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.game-content {
+  width: 100%;
+  max-width: 650px;
+  margin: auto;
+  padding: 30px 20px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #775b40;
+  line-height: 1.5;
+}
+
+.stats {
+  display: flex;
+  gap: 15px;
+  margin: 25px 0;
+}
+
+.stat-card {
+  flex: 1;
+  background: white;
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0 5px 15px #79552a20;
+}
+
+.stat-card span,
+.stat-card strong {
+  display: block;
+  margin: 5px;
+}
+
+.stat-card strong {
+  font-size: 26px;
+}
+
+.puzzle-area {
+  padding: 18px;
+  background: #b7834e;
+  border: 7px solid #80502d;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px #59371930;
+}
+
+.wood-board {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 8px 0;
+}
+
+.wood-plank {
+  position: relative;
+  min-height: var(--board-height, 180px);
+  height: var(--board-height, 180px);
+  box-sizing: border-box;
+  border: 3px solid #855127;
+  border-radius: 10px;
+  background: repeating-linear-gradient(
+    0deg,
+    #bd854b,
+    #bd854b 20px,
+    #c9955b 21px,
+    #c9955b 40px
+  );
+  box-shadow: inset 0 0 12px #72421e55, 0 4px 5px #59371930;
+}
+.top-plank {
+  z-index: 2;
+}
+
+.bottom-plank {
+  z-index: 1;
+}
+
+.board-label {
+  position: absolute;
+  top: 7px;
+  left: 10px;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #603d25;
+  opacity: 0.8;
+}
+
+.screw-position {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+}
+
+.screw-hole {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #56361f;
+  border: 4px solid #98683e;
+  box-shadow: inset 0 3px 7px #24160d;
+}
+
+.screw {
+  position: relative;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #555;
+  background: linear-gradient(145deg, #f3f3f3, #777);
+  font-size: 26px;
+  cursor: pointer;
+  box-shadow: 0 3px 6px #39261570;
+  transition: transform 0.2s;
+}
+
+.screw:hover {
+  transform: scale(1.1);
+}
+
+.screw.hinted {
+  outline: 4px solid #ffe066;
+  box-shadow: 0 0 16px #fff176;
+  animation: hintPulse 0.8s infinite alternate;
+}
+
+.locked-screw {
+  filter: grayscale(1);
+  opacity: 0.65;
+}
+
+@keyframes hintPulse {
+  from {
+    scale: 1;
+  }
+  to {
+    scale: 1.12;
+  }
+}
+
+.instruction {
+  margin: 22px 0;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.action-button {
+  padding: 12px 17px;
+  border: none;
+  border-radius: 10px;
+  background: #80502d;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.next-button {
+  background: #d89c3b;
+  color: #392615;
+}
+
+.action-button:hover {
+  opacity: 0.85;
+}
+
+.action-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background: #603d25;
+  color: white;
+  margin-top: auto;
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 26px;
+  }
+
+  .topbar {
+    padding: 15px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .wood-plank {
+    height: 115px;
+  }
+
+  .puzzle-area {
+    padding: 10px;
+  }
+}
+
+/* Smooth screw interaction */
+.screw {
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* Screw hover effect */
+.screw:hover {
+  transform: scale(1.12) rotate(15deg);
+}
+
+/* Highlight the suggested screw */
+.screw.hinted {
+  outline: 4px solid #ffe066;
+  box-shadow: 0 0 18px #fff176;
+  animation: hintPulse 0.8s infinite alternate;
+}
+
+@keyframes hintPulse {
+  from {
+    filter: brightness(1);
+  }
+
+  to {
+    filter: brightness(1.5);
+  }
+}
+
+/* Give the wooden boards a more natural look */
+.wood-plank {
+  position: relative;
+  min-height: var(--board-height, 180px);
+  height: var(--board-height, 180px);
+  box-sizing: border-box;
+
+  border: 4px solid #75421f;
+  border-radius: 12px;
+
+  background:
+    repeating-linear-gradient(
+      7deg,
+      transparent 0px,
+      rgba(92, 47, 17, 0.12) 2px,
+      transparent 4px,
+      transparent 13px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      #a96d35 0px,
+      #c58b4e 8px,
+      #d7a568 17px,
+      #b77a3e 25px,
+      #c99559 34px
+    );
+
+  box-shadow:
+    inset 0 3px 5px rgba(255, 220, 165, 0.65),
+    inset 0 -5px 8px rgba(73, 38, 15, 0.5),
+    inset 4px 0 7px rgba(80, 43, 18, 0.25),
+    0 5px 0 #75421f,
+    0 9px 0 #4c2b17,
+    0 15px 22px rgba(35, 20, 10, 0.4);
+
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.action-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+.screw.removing {
+  animation: screwRemove 0.3s ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes screwRemove {
+  from {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+
+  to {
+    transform: rotate(180deg) scale(0.2);
+    opacity: 0;
+  }
+}
+
+/* ===== 3D GAME ANIMATIONS ===== */
+
+.game {
+  background: linear-gradient(135deg, #f5f3ff, #e0e7ff, #fce7f3);
+  transition: background 0.5s ease;
+}
+
+.wood-plank {
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+  box-shadow:
+    inset 0 5px 10px rgba(255, 255, 255, 0.25),
+    inset 0 -6px 12px rgba(75, 35, 10, 0.25),
+    0 10px 0 #75421f,
+    0 16px 22px rgba(40, 20, 10, 0.25);
+}
+
+.screw {
+  transition:
+    transform 0.25s ease,
+    filter 0.25s ease;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 5px 3px rgba(0, 0, 0, 0.3));
+}
+
+.screw:hover:not(:disabled) {
+  transform: translateY(-5px) rotate(18deg) scale(1.2);
+  filter: drop-shadow(0 9px 5px rgba(79, 70, 229, 0.45));
+}
+
+.screw:active:not(:disabled) {
+  transform: translateY(2px) scale(0.9);
+}
+
+.screw.removing {
+  animation: screw-remove-3d 0.3s ease forwards;
+}
+
+@keyframes screw-remove-3d {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotate(180deg) scale(0.2);
+    opacity: 0;
+  }
+}
+
+.action-button {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+  box-shadow: 0 5px 0 rgba(49, 46, 129, 0.3);
+}
+
+.action-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 0 rgba(49, 46, 129, 0.25);
+}
+
+.action-button:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(49, 46, 129, 0.25);
+}
+
+.stat-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 10px 22px rgba(79, 70, 229, 0.15);
+}
+
+.login-form {
+  animation: login-appear 0.6s ease both;
+}
+
+@keyframes login-appear {
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screw,
+  .wood-plank,
+  .action-button,
+  .stat-card,
+  .login-form {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ===== ADVANCED 3D WOOD SCREW GAME ===== */
+
+.game {
+  perspective: 1200px;
+}
+
+.puzzle-area {
+  perspective: 1400px;
+  perspective-origin: center;
+}
+
+.wood-board {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  padding: 20px 10px 30px;
+  box-sizing: border-box;
+
+  transform-style: preserve-3d;
+  transform: rotateX(8deg);
+  transition: transform 0.5s ease;
+  filter: drop-shadow(0 25px 18px rgba(48, 25, 10, 0.25));
+}
+
+.wood-board:hover {
+  transform: rotateX(3deg) scale(1.015);
+}
+.wood-plank {
+  transform-style: preserve-3d;
+  border: 4px solid #74421f;
+  border-radius: 12px;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      #a96932 0px,
+      #c58a50 14px,
+      #d5a166 16px,
+      #ad713a 30px
+    );
+  box-shadow:
+    inset 0 5px 9px rgba(255, 224, 170, 0.35),
+    inset 0 -8px 12px rgba(70, 30, 5, 0.35),
+    0 8px 0 #79451f,
+    0 15px 0 #593018,
+    0 24px 30px rgba(40, 20, 5, 0.35);
+}
+
+.screw-position {
+  transform-style: preserve-3d;
+}
+
+.screw-hole {
+  border-radius: 50%;
+  background: radial-gradient(circle, #29170d 0%, #603719 55%, #d2a16d 75%);
+  box-shadow:
+    inset 0 4px 6px rgba(0, 0, 0, 0.65),
+    0 2px 2px rgba(255, 220, 170, 0.35);
+}
+
+.screw {
+  position: relative;
+  transform-style: preserve-3d;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 25%,
+    #ffffff 0%,
+    #dbeafe 12%,
+    #94a3b8 32%,
+    #475569 62%,
+    #1e293b 85%
+  );
+  border: 2px solid #64748b;
+  box-shadow:
+    inset 2px 3px 4px rgba(255, 255, 255, 0.8),
+    inset -3px -4px 5px rgba(0, 0, 0, 0.55),
+    0 5px 0 #334155,
+    0 9px 12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.screw:hover:not(:disabled) {
+  transform: translateY(-7px) rotate(35deg) scale(1.25);
+  filter: brightness(1.2) drop-shadow(0 10px 8px #6366f180);
+}
+
+.screw:active:not(:disabled) {
+  transform: translateY(3px) rotate(15deg) scale(0.9);
+  box-shadow:
+    inset 2px 3px 4px rgba(0, 0, 0, 0.4),
+    0 1px 0 #334155;
+}
+
+.action-button {
+  border-radius: 12px;
+  transform-style: preserve-3d;
+  box-shadow:
+    0 5px 0 #3730a3,
+    0 9px 15px rgba(49, 46, 129, 0.25);
+}
+
+.action-button:hover:not(:disabled) {
+  transform: translateY(-4px);
+  box-shadow:
+    0 8px 0 #3730a3,
+    0 14px 20px rgba(49, 46, 129, 0.3);
+}
+
+.action-button:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #3730a3;
+}
+
+@media (max-width: 600px) {
+  .wood-board {
+    transform: none;
+  }
+
+  .wood-board:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wood-board,
+  .wood-plank,
+  .screw,
+  .action-button {
+    transition: none !important;
+  }
+}
+/* 3D Player Dashboard */
+
+.dashboard-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 16px;
+  background:
+    radial-gradient(circle at 15% 15%, #6547bd, transparent 35%),
+    radial-gradient(circle at 85% 85%, #a63b9c, transparent 35%),
+    linear-gradient(135deg, #100d2c, #24134b, #351653);
+  perspective: 1200px;
+}
+
+.dashboard-card {
+  width: 100%;
+  max-width: 700px;
+  padding: 40px 30px;
+  text-align: center;
+  color: white;
+  border: 1px solid #ffffff35;
+  border-radius: 30px;
+  background: linear-gradient(
+    145deg,
+    rgba(91, 63, 151, 0.92),
+    rgba(30, 20, 66, 0.96)
+  );
+  box-shadow:
+    0 30px 60px #00000055,
+    inset 0 1px 1px #ffffff55;
+  animation: dashboardEnter 0.8s ease both;
+}
+
+@keyframes dashboardEnter {
+  from {
+    opacity: 0;
+    transform: rotateX(15deg) translateY(40px) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: rotateX(0) translateY(0) scale(1);
+  }
+}
+
+.dashboard-avatar {
+  width: 90px;
+  height: 90px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 20px;
+  font-size: 43px;
+  border-radius: 25px;
+  background: linear-gradient(145deg, #a77aff, #5a2bc1);
+  box-shadow: 0 9px 0 #351477, 0 18px 30px #00000035;
+  animation: avatarFloat 2.5s ease-in-out infinite;
+}
+
+@keyframes avatarFloat {
+  0%, 100% {
+    transform: translateY(0) rotateY(-5deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotateY(5deg);
+  }
+}
+
+/* ===== PREMIUM 3D PLAYER DASHBOARD ===== */
+
+.dashboard-page {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 35px 16px;
+  overflow: hidden;
+  perspective: 1400px;
+  background:
+    radial-gradient(ellipse at 15% 20%, #6325b9 0%, transparent 35%),
+    radial-gradient(ellipse at 85% 80%, #a324a7 0%, transparent 32%),
+    linear-gradient(135deg, #080718, #17102f 50%, #10091e);
+}
+
+.dashboard-page::before,
+.dashboard-page::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  filter: blur(3px);
+  opacity: 0.45;
+  pointer-events: none;
+  animation: orbFloat 8s ease-in-out infinite alternate;
+}
+
+.dashboard-page::before {
+  top: 4%;
+  left: -100px;
+  background: radial-gradient(circle, #a855f7, transparent 70%);
+}
+
+.dashboard-page::after {
+  right: -100px;
+  bottom: 3%;
+  background: radial-gradient(circle, #ec4899, transparent 70%);
+  animation-delay: -4s;
+}
+
+@keyframes orbFloat {
+  from { transform: translate3d(0, 0, 0) scale(0.9); }
+  to { transform: translate3d(35px, -25px, 0) scale(1.15); }
+}
+
+.dashboard-card {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  padding: 42px 32px;
+  overflow: hidden;
+  text-align: center;
+  color: #fff;
+  border: 1px solid rgba(221, 190, 255, 0.35);
+  border-radius: 32px;
+  background:
+    linear-gradient(145deg, rgba(104, 67, 157, 0.5),
+    rgba(25, 17, 51, 0.88));
+  box-shadow:
+    0 35px 80px rgba(0, 0, 0, 0.55),
+    0 0 45px rgba(157, 78, 221, 0.16),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3),
+    inset 0 -2px 2px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(22px);
+  transform-style: preserve-3d;
+  animation: dashboardAppear 0.85s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.dashboard-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 70%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent,
+    rgba(255, 255, 255, 0.07),
+    transparent
+  );
+  animation: glassShine 7s ease-in-out infinite;
+}
+
+@keyframes dashboardAppear {
+  from {
+    opacity: 0;
+    transform: rotateX(12deg) translateY(45px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: rotateX(0) translateY(0) scale(1);
+  }
+}
+
+@keyframes glassShine {
+  0%, 65% { left: -100%; }
+  100% { left: 150%; }
+}
+
+.dashboard-avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 104px;
+  height: 104px;
+  margin: 0 auto 22px;
+  font-size: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 30px;
+  background: linear-gradient(145deg, #d4a5ff, #9149f4 55%, #5921b6);
+  box-shadow:
+    0 9px 0 #411784,
+    0 16px 0 #2b105d,
+    0 28px 35px rgba(0, 0, 0, 0.4),
+    inset 0 2px 5px rgba(255, 255, 255, 0.65);
+  transform: translateZ(45px);
+  animation: avatar3D 3s ease-in-out infinite;
+}
+
+@keyframes avatar3D {
+  0%, 100% { transform: translateY(0) translateZ(45px) rotateY(-7deg); }
+  50% { transform: translateY(-10px) translateZ(45px) rotateY(7deg); }
+}
+
+.dashboard-tag {
+  color: #d8b7ff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 5px;
+  text-shadow: 0 0 18px rgba(190, 130, 255, 0.65);
+}
+
+.dashboard-card h1 {
+  margin: 15px 0;
+  font-size: clamp(28px, 5vw, 43px);
+  font-weight: 850;
+  letter-spacing: -1px;
+  text-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-card h1 span {
+  color: #ddbaff;
+  overflow-wrap: anywhere;
+  text-shadow: 0 0 22px rgba(183, 115, 255, 0.55);
+}
+
+.dashboard-description {
+  max-width: 480px;
+  margin: 0 auto;
+  color: #ded3f5;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 36px 0;
+  perspective: 900px;
+}
+
+.dashboard-stat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 23px 8px;
+  border: 1px solid rgba(222, 193, 255, 0.27);
+  border-radius: 22px;
+  background: linear-gradient(145deg, #ffffff19, #ffffff06);
+  box-shadow:
+    0 8px 0 rgba(25, 12, 50, 0.7),
+    0 15px 25px rgba(0, 0, 0, 0.2),
+    inset 0 1px 1px rgba(255, 255, 255, 0.17);
+  transform: translateZ(15px);
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.dashboard-stat:hover {
+  transform: translateY(-8px) translateZ(30px) rotateX(4deg);
+  border-color: #d9b2ff;
+  box-shadow:
+    0 12px 0 rgba(45, 20, 85, 0.8),
+    0 22px 35px rgba(156, 78, 255, 0.18),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25);
+}
+
+.dashboard-stat span {
+  font-size: 30px;
+  filter: drop-shadow(0 0 10px rgba(206, 163, 255, 0.35));
+}
+
+.dashboard-stat strong {
+  color: #eddbff;
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 850;
+}
+
+.dashboard-stat small {
+  color: #ded2f5;
+  font-size: 12px;
+}
+
+.dashboard-start,
+.dashboard-logout {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  margin: 17px auto 0;
+  padding: 16px 20px;
+  border-radius: 15px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-start {
+  color: white;
+  border: 1px solid #d8b9ff;
+  background: linear-gradient(135deg, #c28aff, #8c43f5 55%, #6524d2);
+  box-shadow:
+    0 7px 0 #42158f,
+    0 14px 28px rgba(124, 58, 237, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+.dashboard-start:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 11px 0 #42158f,
+    0 22px 35px rgba(168, 85, 247, 0.4);
+}
+
+.dashboard-start:active {
+  transform: translateY(4px);
+  box-shadow: 0 3px 0 #42158f;
+}
+
+.dashboard-logout {
+  color: #f0e4ff;
+  border: 1px solid rgba(231, 210, 255, 0.35);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-logout:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+@media (max-width: 480px) {
+  .dashboard-card {
+    padding: 30px 16px;
+    border-radius: 25px;
+  }
+
+  .dashboard-stats {
+    gap: 8px;
+    margin: 28px 0;
+  }
+
+  .dashboard-stat {
+    padding: 17px 4px;
+    border-radius: 16px;
+  }
+
+  .dashboard-stat small {
+    font-size: 10px;
+  }
+
+  .dashboard-tag {
+    letter-spacing: 3px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-page::before,
+  .dashboard-page::after,
+  .dashboard-avatar,
+  .dashboard-card,
+  .dashboard-card::before {
+    animation: none;
+  }
+
+  .dashboard-stat,
+  .dashboard-start,
+  .dashboard-logout {
+    transition: none;
+  }
+}
+
+
+/* ===== DASHBOARD HEADER ===== */
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.dashboard-header .dashboard-avatar {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.dashboard-header h1 {
+  overflow-wrap: anywhere;
+}
+
+.dashboard-header .dashboard-tag {
+  margin-top: 0;
+}
+
+/* ===== FOUR DASHBOARD STAT CARDS ===== */
+
+.dashboard-stats {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+/* ===== 30 LEVELS GRID ===== */
+
+.levels-section {
+  margin: 32px 0;
+  text-align: left;
+}
+
+.levels-section h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #f3e8ff;
+  font-size: 25px;
+}
+
+.levels-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.level-card {
+  min-width: 0;
+  min-height: 118px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 4px;
+  color: white;
+  font-family: inherit;
+  border: 1px solid #a78bfa;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #6841a5, #302052);
+  box-shadow: 0 5px 0 #21143d;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.level-card.unlocked {
+  border-color: #c4b5fd;
+}
+
+.level-card.completed {
+  border-color: #86efac;
+  background: linear-gradient(145deg, #166534, #14532d);
+  box-shadow: 0 5px 0 #0b3320;
+}
+
+.level-card.locked {
+  background: linear-gradient(145deg, #4b5563, #272b35);
+  border-color: #6b7280;
+  opacity: 0.7;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.level-card:not(:disabled):hover {
+  transform: translateY(-4px);
+  box-shadow: 0 9px 0 #21143d;
+}
+
+.level-card > span:first-child {
+  font-size: 22px;
+}
+
+.level-card strong {
+  font-size: 12px;
+}
+
+.level-card .level-stars {
+  color: #fbbf24;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.level-card small {
+  font-size: 10px;
+  color: #e9d5ff;
+}
+
+/* ===== RESPONSIVE DASHBOARD ===== */
+
+@media (max-width: 600px) {
+  .dashboard-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .levels-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .level-card {
+    min-height: 108px;
+  }
+
+  .dashboard-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .level-card {
+    transition: none;
+  }
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dashboard-home-button {
+  padding: 10px 14px;
+  border: 1px solid #d8b9ff;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #a855f7, #6d28d9);
+  color: white;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #42158f;
+  transition: transform 0.2s ease;
+}
+
+.dashboard-home-button:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 480px) {
+  .topbar-right {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  .dashboard-home-button {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+}
+
+.level-complete {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #173a29, #39734d);
+  color: white;
+}
+
+.level-complete-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 28px;
+  box-sizing: border-box;
+  border-radius: 24px;
+  text-align: center;
+  background: #234832;
+  box-shadow: 0 15px 45px #0005;
+}
+
+.level-complete-card h1 {
+  color: #ffdf80;
+}
+
+.completion-stats {
+  display: flex;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.completion-stats div {
+  flex: 1;
+  padding: 16px 8px;
+  border-radius: 14px;
+  background: #365e42;
+}
+
+.completion-stats span,
+.completion-stats strong {
+  display: block;
+  margin: 8px 0;
+}
+
+.level-complete-card button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 12px;
+  background: #ffdf80;
+  color: #234832;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 3D Game Settings Button */
+
+.dashboard-settings-button {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 16px 22px;
+  margin: 20px 0;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+  border: 2px solid #d8b4fe;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #c084fc, #7c3aed, #4c1d95);
+  box-shadow:
+    0 7px 0 #35116f,
+    0 12px 22px #0005,
+    inset 0 2px 2px #ffffff70;
+  cursor: pointer;
+  transform: translateY(0);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-settings-button:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 11px 0 #35116f,
+    0 18px 28px #0006,
+    inset 0 2px 3px #ffffff80;
+}
+
+.dashboard-settings-button:active {
+  transform: translateY(5px);
+  box-shadow:
+    0 2px 0 #35116f,
+    0 5px 10px #0005;
+}
+
+.setting-toggle {
+  width: 56px;
+  height: 30px;
+  padding: 4px;
+  border: none;
+  border-radius: 30px;
+  background: #b8bec8;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+}
+
+.setting-toggle span {
+  display: block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease;
+}
+
+.setting-toggle.active {
+  background: #22c55e;
+}
+
+.setting-toggle.active span {
+  transform: translateX(26px);
+}
+
+.setting-toggle:focus-visible {
+  outline: 3px solid #60a5fa;
+  outline-offset: 3px;
+}
+
+/* 3D Back to Dashboard Button */
+.settings-back-button {
+  width: 100%;
+  padding: 14px 22px;
+  margin-top: 24px;
+
+  background: linear-gradient(145deg, #60a5fa, #2563eb);
+  color: #ffffff;
+
+  border: none;
+  border-radius: 14px;
+
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+
+  box-shadow:
+    0 7px 0 #1d4ed8,
+    0 12px 20px rgba(37, 99, 235, 0.3);
+
+  transform: translateY(0);
+  transition: all 0.2s ease;
+}
+
+.settings-back-button:hover {
+  background: linear-gradient(145deg, #93c5fd, #3b82f6);
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 10px 0 #1d4ed8,
+    0 16px 25px rgba(37, 99, 235, 0.4);
+}
+
+.settings-back-button:active {
+  transform: translateY(5px);
+
+  box-shadow:
+    0 2px 0 #1d4ed8,
+    0 5px 10px rgba(37, 99, 235, 0.25);
+}
+
+/* Force smaller button sizes */
+.settings-page .settings-back-button,
+.dashboard-settings-button {
+  width: fit-content !important;
+  min-width: 0 !important;
+  max-width: 240px;
+  padding: 9px 16px !important;
+  margin: 12px auto !important;
+  font-size: 13px !important;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+
+/* Keep dashboard button centered */
+.dashboard-settings-button {
+  display: block;
+}
+
+/* Keep settings button centered */
+.settings-page .settings-back-button {
+  display: block;
+}
+
+/* Dark Mode - Wood Screw Puzzle */
+
+body.wood-dark-mode {
+  background: #111827 !important;
+  color: #f9fafb;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+body.wood-dark-mode #root {
+  min-height: 100vh;
+  background: #111827;
+  color: #f9fafb;
+}
+
+body.wood-dark-mode .settings-page,
+body.wood-dark-mode .dashboard,
+body.wood-dark-mode .dashboard-page {
+  background: #111827;
+  color: #f9fafb;
+}
+
+body.wood-dark-mode .settings-card {
+  background: #1f2937;
+  color: #f9fafb;
+  border-color: #374151;
+}
+
+body.wood-dark-mode .setting-row {
+  background: #273449;
+  color: #f9fafb;
+  border-color: #374151;
+}
+
+body.wood-dark-mode .setting-info small {
+  color: #d1d5db;
+}
+
+body.wood-dark-mode .settings-heading p {
+  color: #d1d5db;
+}
+
+body.wood-dark-mode .settings-saved {
+  color: #86efac;
+}
+
+/* Settings Screen - Match Original Game Theme */
+
+.settings-page {
+  min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 30px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: transparent;
+  color: inherit;
+}
+
+.settings-card {
+  width: 100%;
+  max-width: 480px;
+  box-sizing: border-box;
+  padding: 28px 24px;
+  border-radius: 22px;
+
+  background: linear-gradient(145deg, #fff8e8, #f0d8ae);
+  border: 3px solid #9a6838;
+
+  box-shadow:
+    0 9px 0 #744523,
+    0 16px 28px rgba(0, 0, 0, 0.22);
+}
+
+.settings-heading {
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.settings-heading > span {
+  font-size: 42px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.settings-heading h1 {
+  margin: 0 0 8px;
+  font-size: 27px;
+  font-weight: 800;
+  color: #653b1d;
+}
+
+.settings-heading p {
+  margin: 0;
+  font-size: 14px;
+  color: #805a36;
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 15px;
+
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid #d5b58b;
+  box-shadow: 0 3px 0 #d2b38b;
+}
+
+.setting-icon {
+  font-size: 25px;
+  flex-shrink: 0;
+}
+
+.setting-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.setting-info strong {
+  display: block;
+  font-size: 14px;
+  color: #51351e;
+}
+
+.setting-info small {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #806449;
+}
+
+.settings-card .settings-back-button {
+  width: fit-content !important;
+  min-width: 0 !important;
+  max-width: 100%;
+  margin: 24px auto 10px !important;
+  display: block;
+}
+
+/* Settings - Normal and Readable Font Sizes */
+
+.settings-heading h1 {
+  font-size: 26px !important;
+}
+
+.settings-heading p {
+  font-size: 15px !important;
+}
+
+.setting-info strong {
+  font-size: 16px !important;
+  font-weight: 600;
+}
+
+.setting-info small {
+  font-size: 14px !important;
+  line-height: 1.5;
+}
+
+.setting-icon {
+  font-size: 26px !important;
+}
+
+.setting-row {
+  padding: 16px !important;
+  gap: 14px;
+}
+
+.setting-toggle {
+  flex-shrink: 0;
+}
+
+.settings-back-button {
+  font-size: 14px !important;
+}
+
+.settings-saved {
+  font-size: 13px !important;
+}
+
+/* Dark Mode - Settings Text Visibility */
+
+body.wood-dark-mode .settings-card {
+  background: #1f2937 !important;
+  color: #ffffff !important;
+}
+
+body.wood-dark-mode .settings-heading h1 {
+  color: #ffffff !important;
+}
+
+body.wood-dark-mode .settings-heading p {
+  color: #d1d5db !important;
+}
+
+body.wood-dark-mode .setting-row {
+  background: #273449 !important;
+  border-color: #475569 !important;
+}
+
+body.wood-dark-mode .setting-info strong {
+  color: #ffffff !important;
+}
+
+body.wood-dark-mode .setting-info small {
+  color: #e2e8f0 !important;
+}
+
+body.wood-dark-mode .settings-saved {
+  color: #86efac !important;
+}
+
+body.wood-dark-mode .settings-back-button {
+  color: #ffffff !important;
+}
+
+
+
+
+
+/* ===== GAME HISTORY SECTION ===== 
+
+.game-history-section {
+  margin-top: 30px;
+  padding: 24px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #fff8e8, #f0dfbd);
+  border: 1px solid #d6b77a;
+  box-shadow:
+    0 8px 0 #b8945b,
+    0 14px 24px rgba(0, 0, 0, 0.15);
+  color: #49321d;
+}
+
+.game-history-section h2 {
+  margin: 0 0 20px;
+  font-size: 25px;
+  font-weight: 800;
+  color: #65421f;
+}
+
+.game-history-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.game-history-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #ffffff, #f4e7d0);
+  border: 1px solid #ddc69e;
+  box-shadow:
+    0 5px 0 #d0b486,
+    0 9px 15px rgba(75, 47, 19, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.game-history-item:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 8px 0 #d0b486,
+    0 13px 20px rgba(75, 47, 19, 0.18);
+}
+
+.game-history-item strong {
+  font-size: 18px;
+  color: #6d451c;
+}
+
+.game-history-item span {
+  font-size: 14px;
+  color: #594632;
+}
+
+.game-history-item small {
+  padding-top: 8px;
+  border-top: 1px solid #e2d0b0;
+  font-size: 12px;
+  color: #78664f;
+  line-height: 1.5;
+}
+
+.game-history-section > p {
+  color: #78664f;
+  line-height: 1.6;
+}
+
+Mobile responsive design 
+
+@media (max-width: 600px) {
+  .game-history-section {
+    padding: 16px;
+    margin-top: 22px;
+  }
+
+  .game-history-section h2 {
+    font-size: 21px;
+  }
+
+  .game-history-list {
+    grid-template-columns: 1fr;
+  }
+
+  .game-history-item {
+    padding: 15px;
+  }
+}*/
+
+
+/* ===== GAME HISTORY PAGE ===== */
+
+.history-page {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background:
+    radial-gradient(circle at top, #fff0cc, transparent 55%),
+    linear-gradient(135deg, #3c281b, #76502e, #24180f);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.history-page-card {
+  width: 100%;
+  max-width: 1000px;
+  padding: 32px;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #fff9ec, #ead5ad);
+  border: 2px solid #c39a60;
+  box-shadow:
+    0 10px 0 #9b7040,
+    0 20px 40px rgba(0, 0, 0, 0.35);
+  box-sizing: border-box;
+}
+
+.history-page-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.history-page-header h1 {
+  margin: 0 0 10px;
+  font-size: clamp(26px, 4vw, 36px);
+  color: #59371b;
+  font-weight: 900;
+}
+
+.history-page-header p {
+  margin: 0;
+  color: #806344;
+  font-size: 15px;
+}
+
+.history-empty {
+  text-align: center;
+  padding: 45px 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px dashed #c7a575;
+}
+
+.history-empty > span {
+  font-size: 52px;
+}
+
+.history-empty h2 {
+  color: #59371b;
+}
+
+.history-empty p {
+  color: #806344;
+}
+
+.history-page .game-history-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.history-page .game-history-item {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #fffdf7, #ead8b8);
+  border: 1px solid #d5b788;
+  box-shadow:
+    0 6px 0 #c4a171,
+    0 10px 18px rgba(74, 46, 20, 0.15);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.history-page .game-history-item:hover {
+  transform: translateY(-5px);
+  box-shadow:
+    0 10px 0 #c4a171,
+    0 16px 24px rgba(74, 46, 20, 0.2);
+}
+
+.history-page .game-history-item strong {
+  font-size: 19px;
+  color: #68421f;
+}
+
+.history-page .game-history-item span {
+  color: #594632;
+  font-size: 14px;
+}
+
+.history-page .game-history-item small {
+  padding-top: 10px;
+  border-top: 1px solid #ddc8a6;
+  color: #806d54;
+  line-height: 1.5;
+}
+
+.history-back-button {
+  display: block;
+  margin: 30px auto 0;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #87572b, #593719);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #392312;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.history-back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 #392312;
+}
+
+.history-back-button:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #392312;
+}
+
+@media (max-width: 600px) {
+  .history-page {
+    padding: 20px 12px;
+  }
+
+  .history-page-card {
+    padding: 20px 14px;
+    border-radius: 18px;
+  }
+
+  .history-page .game-history-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* 3D Metallic Screw Head */
+
+.screw-head {
+  width: 34px;
+  height: 34px;
+  display: block;
+  position: relative;
+  border-radius: 50%;
+  box-sizing: border-box;
+
+  background: radial-gradient(
+    circle at 30% 25%,
+    #ffffff 0%,
+    #dce3e8 12%,
+    #89959f 35%,
+    #424b54 65%,
+    #20262c 100%
+  );
+
+  border: 2px solid #59636c;
+
+  box-shadow:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.75),
+    inset -3px -4px 5px rgba(0, 0, 0, 0.65),
+    0 4px 0 #252b31,
+    0 6px 9px rgba(0, 0, 0, 0.45);
+
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.screw-slot {
+  position: absolute;
+  width: 18px;
+  height: 4px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(-35deg);
+  border-radius: 3px;
+  background: #303840;
+  box-shadow:
+    inset 0 1px 1px rgba(0, 0, 0, 0.8),
+    0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.screw:hover .screw-head {
+  filter: brightness(1.15);
+  transform: translateY(-2px);
+}
+
+/* 3D Wood Plank Falling Animation */
+.wood-plank.plank-falling {
+  animation: plankFall 0.8s ease-in forwards;
+  pointer-events: none;
+  transform-origin: center center;
+}
+
+@keyframes plankFall {
+  0% {
+    transform: translateY(0) rotateX(0deg) rotateZ(0deg);
+    opacity: 1;
+  }
+
+  35% {
+    transform: translateY(25px) rotateX(12deg) rotateZ(3deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(450px) rotateX(35deg) rotateZ(12deg);
+    opacity: 0;
+  }
+}
+
+/* Parallel 3D Wooden Planks */
+.wood-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 20px 10px 30px;
+}
+
+.wood-plank {
+  width: 100%;
+  max-width: 520px;
+  min-height: var(--board-height, 180px);
+  height: var(--board-height, 180px);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.bottom-plank {
+  transform: translateX(8px) translateZ(0);
+  z-index: 1;
+}
+
+.top-plank {
+  transform: translateX(-8px) translateZ(10px);
+  z-index: 2;
+}
+
+/* ===== REALISTIC WOOD & METAL FINISH ===== */
+
+.puzzle-area {
+  background: linear-gradient(145deg, #d6a064, #8b572e 75%, #603719);
+  border: 5px solid #68401f;
+  border-radius: 22px;
+  box-shadow:
+    inset 0 2px 5px rgba(255, 226, 174, 0.55),
+    0 10px 0 #59351d,
+    0 18px 30px rgba(47, 27, 12, 0.3);
+}
+
+/* Natural wood grain and polished edges */
+.wood-plank {
+  background:
+    repeating-linear-gradient(
+      3deg,
+      transparent 0 8px,
+      rgba(89, 45, 16, 0.13) 9px,
+      transparent 11px 19px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      #ad7139 0 12px,
+      #d4a066 13px 22px,
+      #bd8246 23px 34px,
+      #e0b47b 35px 39px
+    );
+
+  border: 3px solid #75431f;
+  border-radius: 12px;
+
+  box-shadow:
+    inset 0 3px 5px rgba(255, 231, 186, 0.65),
+    inset 0 -7px 10px rgba(67, 33, 12, 0.4),
+    0 7px 0 #79451f,
+    0 13px 0 #503018,
+    0 19px 22px rgba(35, 20, 10, 0.3);
+}
+
+/* Metallic screw with realistic highlights */
+.screw {
+  background:
+    radial-gradient(
+      circle at 28% 23%,
+      #ffffff 0%,
+      #e2e8f0 12%,
+      #aab5c1 30%,
+      #647282 55%,
+      #303b49 78%,
+      #1c2530 100%
+    );
+
+  border: 2px solid #52606d;
+
+  box-shadow:
+    inset 2px 3px 4px rgba(255, 255, 255, 0.85),
+    inset -3px -4px 5px rgba(0, 0, 0, 0.6),
+    0 4px 0 #29333e,
+    0 7px 10px rgba(0, 0, 0, 0.35);
+
+  transition:
+    transform 0.25s ease,
+    filter 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.screw:hover:not(:disabled) {
+  transform: translateY(-4px) rotate(12deg) scale(1.1);
+  filter: brightness(1.15);
+}
+
+.screw:active:not(:disabled) {
+  transform: translateY(2px) scale(0.94);
+}
+
+/* Smooth, accessible motion */
+@media (prefers-reduced-motion: reduce) {
+  .screw,
+  .wood-plank,
+  .puzzle-area {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* ===== MOBILE RESPONSIVE WOOD SCREW PUZZLE ===== */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+button {
+  touch-action: manipulation;
+}
+
+/* Game layout */
+.game {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.topbar {
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px 16px;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.game-content {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px 16px;
+}
+
+.puzzle-area {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.wood-board {
+  width: 100%;
+  padding: 16px 8px 24px;
+}
+
+.wood-plank {
+  width: 100%;
+  max-width: 520px;
+  min-width: 0;
+}
+
+/* Larger, comfortable touch targets */
+.screw {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.action-button,
+.dashboard-start,
+.dashboard-settings-button,
+.dashboard-logout,
+.dashboard-home-button,
+.history-back-button {
+  min-height: 44px;
+}
+
+/* Dashboard */
+.dashboard-page {
+  width: 100%;
+  min-height: 100vh;
+  padding: 16px;
+}
+
+.dashboard-card {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.levels-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.level-card {
+  min-width: 0;
+  padding: 10px 4px;
+  overflow-wrap: anywhere;
+}
+
+/* History, Leaderboard and Achievements */
+.history-page {
+  width: 100%;
+  max-width: 100%;
+  padding: 16px;
+}
+
+.history-page-card {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.game-history-list {
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.game-history-item {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .game-content {
+    padding: 16px 12px;
+  }
+
+  .dashboard-page {
+    padding: 12px;
+  }
+
+  .levels-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .game-history-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+  .topbar {
+    padding: 10px;
+  }
+
+  .logo {
+    font-size: 16px;
+  }
+
+  .topbar-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .game-content {
+    padding: 12px 8px;
+  }
+
+  .game-content h1 {
+    font-size: 23px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+  }
+
+  .stats {
+    gap: 8px;
+  }
+
+  .stat-card {
+    min-width: 0;
+    padding: 10px 6px;
+  }
+
+  .wood-board {
+    gap: 10px;
+    padding: 12px 4px 20px;
+  }
+
+  .wood-plank {
+    max-width: 100%;
+    border-radius: 9px;
+  }
+
+  .board-label {
+    font-size: 10px;
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .action-button {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 6px;
+    font-size: 13px;
+  }
+
+  .dashboard-header {
+    gap: 10px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 22px;
+  }
+
+  .dashboard-description {
+    font-size: 13px;
+  }
+
+  .dashboard-stats {
+    gap: 8px;
+  }
+
+  .dashboard-stat {
+    min-width: 0;
+    padding: 12px 6px;
+  }
+
+  .dashboard-stat strong {
+    font-size: 20px;
+  }
+
+  .levels-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .level-card {
+    padding: 10px 5px;
+  }
+
+  .dashboard-start,
+  .dashboard-settings-button,
+  .dashboard-logout {
+    width: 100%;
+  }
+
+  .history-page {
+    height: auto;
+    min-height: 100vh;
+    padding: 10px;
+  }
+
+  .history-page-card {
+    max-height: none;
+    padding: 14px;
+  }
+
+  .history-page-header h1 {
+    font-size: 23px;
+  }
+
+  .game-history-list {
+    grid-template-columns: 1fr;
+  }
+
+  .game-history-item {
+    padding: 10px;
+  }
+
+  .level-complete {
+    padding: 12px;
+  }
+
+  .level-complete-card {
+    width: 100%;
+    max-width: 100%;
+    padding: 18px 12px;
+  }
+}
+
+
+/* ===== OVERLAPPING WOOD PLANKS - LAYOUT FIX ===== */
+
+.puzzle-area {
+  overflow: hidden;
+  padding: 18px;
+}
+
+.wood-board {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  max-width: 650px;
+  min-height: 360px;
+  margin: 0 auto;
+  padding: 12px 8px 30px;
+  transform: none;
+  filter: none;
+}
+
+.wood-plank {
+  position: relative;
+  flex-shrink: 0;
+  width: 88%;
+  max-width: 520px;
+  height: 150px;
+  min-height: 150px;
+  margin-top: -55px;
+  transform: none;
+  border: 3px solid #75421f;
+  border-radius: 12px;
+}
+
+.wood-plank:first-child {
+  margin-top: 0;
+}
+
+.wood-plank:nth-child(odd) {
+  margin-left: -12px;
+}
+
+.wood-plank:nth-child(even) {
+  margin-left: 12px;
+}
+
+.wood-plank .board-label {
+  z-index: 3;
+}
+
+.wood-plank .screw-position {
+  z-index: 4;
+}
+
+.wood-plank.plank-falling {
+  animation: plankFall 0.8s ease-in forwards;
+}
+
+@media (max-width: 480px) {
+  .puzzle-area {
+    padding: 10px;
+  }
+
+  .wood-board {
+    min-height: 300px;
+    padding: 10px 2px 20px;
+  }
+
+  .wood-plank {
+    width: 94%;
+    height: 125px;
+    min-height: 125px;
+    margin-top: -42px;
+  }
+
+  .wood-plank:first-child {
+    margin-top: 0;
+  }
+}
+
+
+
+
+
+/* ===== Responsive Game Layout ===== */
+
+.puzzle-area {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: clip;
+}
+
+.wood-board {
+  width: 100%;
+  max-width: 650px;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.wood-plank {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.action-button {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Mobile screens */
+@media screen and (max-width: 600px) {
+  .puzzle-area {
+    padding: 8px;
+  }
+
+  .wood-board {
+    max-width: 100%;
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+
+  .wood-plank {
+    max-width: 90%;
+  }
+
+  .actions {
+    gap: 8px;
+    padding: 0 8px;
+  }
+
+  .action-button {
+    flex: 1 1 40%;
+    padding: 10px 6px;
+    font-size: 13px;
+  }
+}
+
+
+/* ===== Laptop Game Size ===== */
+
+@media screen and (min-width: 601px) {
+  .puzzle-area {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .wood-board {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .wood-plank {
+    max-width: 90%;
+  }
+
+  .actions {
+    gap: 12px;
+  }
+
+  .action-button {
+    font-size: 15px;
+    padding: 12px 18px;
+  }
+}
+
+
+
+/* Small mobile screens */
+@media screen and (max-width: 380px) {
+  .actions {
+    gap: 6px;
+    padding: 0 4px;
+  }
+
+  .action-button {
+    flex-basis: 100%;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .puzzle-area {
+    padding: 4px;
+    overflow: hidden;
+  }
+
+  .wood-board {
+    min-height: 360px !important;
+    padding: 4px 0;
+  }
+
+  .actions {
+    gap: 6px;
+    padding: 0 4px;
+  }
+
+  .action-button {
+    padding: 8px 5px;
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .wood-plank {
+    max-width: 85%;
+  }
+}
+
+
+/* ===== Mobile Responsive Game ===== */
+
+@media screen and (max-width: 600px) {
+  .puzzle-area {
+    width: 100%;
+    max-width: 100%;
+    padding: 6px;
+    box-sizing: border-box;
+    overflow-x: clip;
+  }
+
+  .wood-board {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+  }
+
+  .wood-plank {
+    width: 75% !important;
+    max-width: 75% !important;
+    box-sizing: border-box;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .action-button {
+    flex: 1 1 40%;
+    min-width: 0;
+    max-width: 100%;
+    font-size: 13px;
+    padding: 9px 5px;
+    box-sizing: border-box;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .wood-plank {
+    width: 70% !important;
+    max-width: 70% !important;
+  }
+
+  .action-button {
+    font-size: 12px;
+    padding: 8px 3px;
+  }
+}
+
+
+
+
+/* ===== FINAL RESPONSIVE GAME LAYOUT ===== */
+
+.game {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.game-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px;
+}
+
+.puzzle-area {
+  width: 100%;
+  max-width: 100%;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.wood-board {
+  width: 100%;
+  max-width: 1100px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 12px 4px 24px;
+  box-sizing: border-box;
+}
+
+.wood-plank {
+  width: 85%;
+  max-width: 900px;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.screw-position {
+  max-width: 100%;
+}
+
+.screw {
+  touch-action: manipulation;
+}
+
+/* Laptop and desktop */
+@media screen and (min-width: 900px) {
+  .game-content {
+    max-width: 1400px;
+    padding: 20px 40px;
+  }
+
+  .puzzle-area {
+    padding: 24px;
+  }
+
+  .wood-board {
+    max-width: 1200px;
+  }
+
+  .wood-plank {
+    width: 85%;
+    max-width: 1000px;
+  }
+}
+
+/* Tablet */
+@media screen and (min-width: 601px) and (max-width: 899px) {
+  .game-content {
+    padding: 16px;
+  }
+
+  .wood-plank {
+    width: 88%;
+  }
+}
+
+/* Mobile */
+@media screen and (max-width: 600px) {
+  .game-content {
+    padding: 10px 8px;
+  }
+
+  .puzzle-area {
+    padding: 6px;
+    border-width: 3px;
+    border-radius: 12px;
+  }
+
+  .wood-board {
+    width: 100%;
+    padding: 8px 0 16px;
+  }
+
+  .wood-plank {
+    width: 88% !important;
+    max-width: 88% !important;
+  }
+
+  .screw-position {
+    width: 44px;
+    height: 44px;
+  }
+
+  .screw {
+    width: 36px;
+    height: 36px;
+    font-size: 21px;
+  }
+
+  .screw-hole {
+    width: 38px;
+    height: 38px;
+  }
+
+  .stats {
+    gap: 6px;
+    margin: 14px 0;
+  }
+
+  .stat-card {
+    padding: 9px 4px;
+  }
+
+  .stat-card strong {
+    font-size: 20px;
+  }
+}
+
+/* Very small mobile */
+@media screen and (max-width: 380px) {
+  .wood-plank {
+    width: 84% !important;
+    max-width: 84% !important;
+  }
+
+  .screw-position {
+    width: 38px;
+    height: 38px;
+  }
+
+  .screw {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+
+  .screw-hole {
+    width: 34px;
+    height: 34px;
+  }
+}

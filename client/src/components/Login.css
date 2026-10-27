@@ -1,0 +1,271 @@
+* {
+  box-sizing: border-box;
+}
+
+.login-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 16px;
+  background:
+    radial-gradient(circle at top left, #7667ff, transparent 40%),
+    radial-gradient(circle at bottom right, #ff77c8, transparent 35%),
+    linear-gradient(135deg, #17113b, #24145a 55%, #3a1764);
+  perspective: 1200px;
+  overflow: hidden;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 410px;
+  padding: 35px;
+  border-radius: 25px;
+  background: linear-gradient(145deg, #ffffff, #eeeaff);
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.35),
+    inset 0 2px 4px rgba(255, 255, 255, 0.9);
+  transform-style: preserve-3d;
+  animation: cardEnter 0.8s ease both;
+}
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: rotateX(18deg) translateY(35px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: rotateX(0) translateY(0) scale(1);
+  }
+}
+
+.form-icon {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 18px;
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #8b5cf6, #5125bd);
+  box-shadow: 0 9px 0 #35158a, 0 15px 25px #b3a0f5;
+  transform: translateZ(25px);
+}
+
+.login-form h2 {
+  color: #281451;
+  text-align: center;
+  font-size: 29px;
+  margin: 12px 0 8px;
+}
+
+.login-form > p {
+  text-align: center;
+  color: #76698e;
+  margin-bottom: 26px;
+}
+
+.login-form label {
+  display: block;
+  color: #39275b;
+  font-weight: 700;
+  margin: 15px 0 8px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 14px 15px;
+  border: 2px solid #e3dcf7;
+  border-radius: 12px;
+  outline: none;
+  background: #fff;
+  font-size: 15px;
+  transition: 0.25s ease;
+}
+
+.login-form input:focus {
+  border-color: #8054ef;
+  box-shadow: 0 0 0 4px #8054ef22;
+  transform: translateY(-2px);
+}
+
+.main-button,
+.popup-button {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-top: 24px;
+  color: white;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  background: linear-gradient(135deg, #8e5cff, #5426c4);
+  box-shadow: 0 6px 0 #35148a, 0 12px 20px #8054ef40;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.main-button:hover,
+.popup-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 0 #35148a, 0 18px 25px #8054ef55;
+}
+
+.main-button:active,
+.popup-button:active {
+  transform: translateY(3px);
+  box-shadow: 0 3px 0 #35148a;
+}
+
+.signup-text {
+  margin-top: 25px;
+  text-align: center;
+  color: #76698e;
+  font-size: 14px;
+}
+
+.signup-text button {
+  border: none;
+  background: transparent;
+  color: #6d3ce3;
+  font-weight: 800;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.signup-text button:hover {
+  text-decoration: underline;
+}
+
+/* 3D Popup overlay */
+
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: rgba(12, 7, 34, 0.76);
+  backdrop-filter: blur(9px);
+  animation: overlayIn 0.3s ease both;
+  perspective: 1200px;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.popup-card {
+  width: 100%;
+  max-width: 390px;
+  padding: 35px 28px;
+  text-align: center;
+  border-radius: 28px;
+  background: linear-gradient(145deg, #ffffff, #f0eaff);
+  box-shadow:
+    0 35px 70px rgba(0, 0, 0, 0.45),
+    inset 0 2px 3px white;
+  transform-style: preserve-3d;
+  animation: popup3DIn 0.65s cubic-bezier(0.2, 1.5, 0.4, 1) both;
+}
+
+@keyframes popup3DIn {
+  0% {
+    opacity: 0;
+    transform: rotateX(-30deg) rotateY(15deg) scale(0.45)
+      translateY(60px);
+  }
+  70% {
+    transform: rotateX(5deg) rotateY(-3deg) scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateX(0) rotateY(0) scale(1);
+  }
+}
+
+.popup-card.success {
+  border: 2px solid #91f5c4;
+}
+
+.popup-card.error {
+  border: 2px solid #ffb0bd;
+}
+
+.popup-icon {
+  width: 85px;
+  height: 85px;
+  margin: 0 auto 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: white;
+  font-size: 48px;
+  font-weight: 900;
+  animation: iconPop 0.7s 0.15s ease both;
+}
+
+.success .popup-icon {
+  background: linear-gradient(145deg, #32e69c, #07965f);
+  box-shadow: 0 9px 0 #08764d, 0 15px 30px #32e69c55;
+}
+
+.error .popup-icon {
+  background: linear-gradient(145deg, #ff7186, #d91e48);
+  box-shadow: 0 9px 0 #9d1637, 0 15px 30px #ff718655;
+}
+
+@keyframes iconPop {
+  from {
+    opacity: 0;
+    transform: translateZ(-80px) rotateY(180deg) scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: translateZ(20px) rotateY(0) scale(1);
+  }
+}
+
+.popup-card h2 {
+  color: #281451;
+  font-size: 27px;
+  margin: 10px 0;
+}
+
+.popup-card p {
+  color: #75688d;
+  line-height: 1.6;
+  margin: 10px 0;
+}
+
+.popup-card .popup-button {
+  margin-top: 22px;
+}
+
+.error .popup-button {
+  background: linear-gradient(135deg, #ff7186, #d91e48);
+  box-shadow: 0 6px 0 #9d1637, 0 12px 20px #ff718655;
+}
+
+.error .popup-button:hover {
+  box-shadow: 0 10px 0 #9d1637, 0 18px 25px #ff718655;
+}
+
+@media (max-width: 480px) {
+  .login-form {
+    padding: 25px 20px;
+  }
+
+  .login-form h2 {
+    font-size: 25px;
+  }
+
+  .popup-card {
+    padding: 28px 20px;
+  }
+}
