@@ -711,13 +711,13 @@ async function loadGameHistory() {
 
   try {
     const response = await fetch(
-      "http://localhost:5000/api/history",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+  `${API_URL}/history`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
 
     const data = await response.json();
 
