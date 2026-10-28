@@ -5,6 +5,12 @@ import Signup from "./components/Signup";
 import { GAME_NAME } from "./config/gameConfig";
 import { generateLevel } from "./data/levelGenerator";
 
+
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:5000/api";
+
+
 const TOTAL_LEVELS = Infinity;
 
 const PROGRESS_KEY = "woodPuzzleProgress";
@@ -312,7 +318,7 @@ const boardRows = planks.length;
   const timer = setTimeout(async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/api/progress",
+        `${API_URL}/progress`,
         {
           method: "PUT",
           headers: {
@@ -665,7 +671,7 @@ async function saveGameHistory(status = "completed") {
 
   try {
     const response = await fetch(
-      "http://localhost:5000/api/history",
+      `${API_URL}/history`,
       {
         method: "POST",
         headers: {

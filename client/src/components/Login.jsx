@@ -2,6 +2,11 @@ import { useState } from "react";
 import "./Login.css";
 import { GAME_NAME } from "../config/gameConfig";
 
+
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:5000/api";
+
 function Login({ onSignupClick, onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,7 +19,7 @@ function Login({ onSignupClick, onLoginSuccess }) {
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/auth/login",
+        `${API_URL}/auth/login`,
         {
           method: "POST",
           headers: {
